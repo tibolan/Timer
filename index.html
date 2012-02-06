@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Timer.js</title>
+    <link href='http://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <style type="text/css">
+        body {
+
+            background: black;
+
+        }
+
+        time {
+            font-size: 3em;
+            color: green;
+            -webkit-transition: 500ms;
+            -moz-transition: 500ms;
+            -ms-transition: 500ms;
+            -o-transition: 500ms;
+            transition: 500ms;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+        }
+
+        #fps {
+            background: silver;
+            border: 1px solid black;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10000000000;
+            padding: 2px 3px;
+        }
+
+    </style>
+</head>
+<body>
+    <span id="fps">0 fps</span>
+    <time id="clock" style="letter-spacing: 2px;">..h..:..:...</time>
+    <script src="Timer.js"></script>
+    <script src="Sugar.js"></script>
+    <script>
+        window["clock"] = document.querySelector("#clock");
+        window["FPS"] = document.querySelector("#fps");
+        function oclock(time) {
+            window["clock"].innerHTML = Date.create(time).format("{HH}h{mm}:{ss}:{ms}");
+            /*for (var i = 0; i < 10000; i++) {
+                window["domCache"] = document.querySelectorAll("*");
+            }*/
+
+        }
+
+        function color(time) {
+            var x = Math.round(Math.random() * 1000);
+            window["clock"].style.color = (x % 2) ? "red" : "blue";
+
+        }
+        var last = 0;
+        function setFps (TIME){
+            window["FPS"].innerHTML = (1000/(TIME-last)).toFixed(2)+" fps";
+            last = TIME;
+            }
+
+        function where(time) {
+
+
+            var x1 = Math.round(Math.random() * 4);
+            var x2 = Math.round(Math.random() * 4);
+            var pos = [0, 25, 50, 75];
+
+
+            window["clock"].style.left = pos[x1] + "%";
+            window["clock"].style.top = pos[x2] + "%";
+        }
+
+        Timer.add(oclock);
+
+        Timer.delay(color, 5000);
+        Timer.each(1000, where);
+        AAA = Timer.add(setFps,100);
+
+    </script>
+</body>
+</html>

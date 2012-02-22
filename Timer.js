@@ -87,17 +87,17 @@ var Timer = (function () {
         TIME = time || (new Date()).getTime();
         for (var i = 0, l = CB.length, o; i < l; i++) {
             o = CB[i];
-            if (o && o.start <= TIME && (TIME - o.last >= o.interval)) {
+            if (o && o.start <= TIME && (TIME - o.current >= o.interval)) {
                 // si o existe
                 // et si le startTime est inferieur à maintenant
                 // et si l'interval est respecte
                 if(o.end <= TIME){
-                    o.callback(o.end);
+                    o.callback(o.end, 100);
                     Timer.remove(o);
                 }
                 else {
-                    o.callback(TIME);
-                    o.last = TIME;
+                    o.callback(TIME, (TIME-o.start)/o.duration);
+                    o.current = TIME;
                 }
             }
 
@@ -140,7 +140,7 @@ var Timer = (function () {
 
 
 
-            fps = (fps && fps > 60) ? 60 : (typeof fps == "undefined") ? 25 : fps;
+            fps = (fps && fps > 30) ? 30 : (typeof fps == "undefined") ? 25 : fps;
             duration =  (duration) ? duration : Infinity;
             delay =  (delay) ? delay : 0;
 
@@ -153,7 +153,7 @@ var Timer = (function () {
                 end: endTime,
                 interval: interval,
 
-                last: -Infinity,
+                current: -Infinity,
 
                 fps: fps,
                 duration: duration,
@@ -179,11 +179,11 @@ var Timer = (function () {
             return Timer.add(fn, 1, 1, duration);
         },
 
-        clear: function (){
+        _clear: function (){
             CB = [];
         },
 
-        getCB: function (){
+        _getCB: function (){
             return CB;
         },
 
@@ -201,5 +201,3 @@ var Timer = (function () {
 		}
     }
 })();
-
-

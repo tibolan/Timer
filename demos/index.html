@@ -38,12 +38,12 @@
 <body>
     <span id="fps">0 fps</span>
     <time id="clock" style="letter-spacing: 2px;">..h..:..:...</time>
-    <script src="Timer.js"></script>
+    <script src="../Timer.js"></script>
     <script src="Sugar.js"></script>
     <script>
         window["clock"] = document.querySelector("#clock");
         window["FPS"] = document.querySelector("#fps");
-        function oclock(time) {
+        function oclock(time,pc) {
             window["clock"].innerHTML = Date.create(time).format("{HH}h{mm}:{ss}:{ms}");
             /*for (var i = 0; i < 10000; i++) {
                 window["domCache"] = document.querySelectorAll("*");
@@ -53,7 +53,7 @@
 
         function color(time) {
             var x = Math.round(Math.random() * 1000);
-            window["clock"].style.color = (x % 2) ? "red" : "blue";
+            window["clock"].style.color = "rgb("+Math.round(Math.random() * 255)+","+Math.round(Math.random() * 255)+","+Math.round(Math.random() * 255)+")";
 
         }
         var last = 0;
@@ -76,9 +76,12 @@
 
         Timer.add(oclock);
 
-        Timer.delay(color, 5000);
+
         Timer.each(1000, where);
+        Timer.each(2500, color);
         AAA = Timer.add(setFps,100);
+
+        BBB = Timer.transform.start({from:0, to:100, duration:2000});
 
     </script>
 </body>

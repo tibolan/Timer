@@ -41,7 +41,7 @@ The method return an object containing everything you need to track the time
             // pc is the percentage of the animation already done, equals always 0 if no duration set.
         }
 
-        Timer.add(foo); // will run foo with a fps
+        Timer.add(foo); // will run foo with a fps of 30
 
         Timer.add(foo, 25, 5000);
         // fps to 25, duration to 5 seconds

@@ -50,9 +50,7 @@ var Timer = (function () {
                 if(!PAUSED) return;
                 PAUSED = false;
                 if(!window.requestAnimFrame){
-                    interval = setInterval(function (){
-                        loop();
-                    }, 25)
+                    interval = setInterval(loop, 25);
                 }
                 else {
                     loop();
@@ -92,11 +90,11 @@ var Timer = (function () {
                 // et si le startTime est inferieur à maintenant
                 // et si l'interval est respecte
                 if(o.end <= TIME){
-                    o.callback(o.end, 100);
+                    o.callback(o.end, 1, o);
                     Timer.remove(o);
                 }
                 else {
-                    o.callback(TIME, (TIME-o.start)/o.duration);
+                    o.callback(TIME, (TIME-o.start)/o.duration, o);
                     o.current = TIME;
                 }
             }
@@ -106,29 +104,32 @@ var Timer = (function () {
         if (Engine.isRunning() && CB.length) {
             Engine.loop();
         }
-        else {
+        else if(Timer.autostart){
             Timer.stop();
         }
     }
 
     function getUid () {
-        return "" + (TIME || (new Date).getTime()) + "-" + parseInt(Math.random() * 1000000);
+        return "" + (TIME || (new Date).getTime()) + "-" + parseInt(Math.random() * 10000);
     }
 
     return {
-
+        //start the loop
         start: function () {
             Engine.start();
         },
 
+        //stop the loop
         stop: function () {
             Engine.stop();
         },
 
+        // toggle loop state
         toggle: function () {
-            (!Engine.isRunning()) ? Timer.start() : Timer.stop();
+            (!Engine.isRunning()) ? Engine.start() : Engine.stop();
         },
 
+        // add a function to the loop
         add: function (fn, fps, duration, delay) {
             if(arguments.length == 1 && typeof fn  != "function"){
                 fps = fn.fps;
@@ -137,44 +138,38 @@ var Timer = (function () {
                 fn = fn.callback;
             }
 
-
-
-
-            fps = (fps && fps > 30) ? 30 : (typeof fps == "undefined") ? 25 : fps;
+            fps = (fps && fps > 100) ? 100 : (typeof fps == "undefined") ? 100 : fps;
             duration =  (duration) ? duration : Infinity;
             delay =  (delay) ? delay : 0;
 
             var startTime = ((new Date).getTime()) + delay;
-            var endTime = startTime + duration;
-            var interval = 1000 / fps;
             var o = {
                 callback: fn,
                 start: startTime ,
-                end: endTime,
-                interval: interval,
-
+                end: startTime + duration,
+                interval: 1000 / fps,
                 current: -Infinity,
-
                 fps: fps,
                 duration: duration,
                 delay: delay,
-
                 uid: getUid()
             };
-            console.log(o);
+
             CB.push(o);
-            if(!Engine.isRunning()) {
-                Timer.start();
+
+            if(Timer.autostart && !Engine.isRunning()) {
+                Engine.start();
             }
+            // return TimerItem object
             return o;
         },
 
-
-        each: function (interval, fn){
+        // run a function every interval
+        each: function (fn, interval){
             return Timer.add(fn, 1/(interval/1000), Infinity, 0);
         },
 
-
+        // run a
         delay: function (fn, duration){
             return Timer.add(fn, 1, 1, duration);
         },
@@ -187,6 +182,7 @@ var Timer = (function () {
             return CB;
         },
 
+
         remove: function (o){
             for (var i = 0, cb, l = CB.length; i < l; i++) {
                 cb = CB[i];
@@ -198,6 +194,8 @@ var Timer = (function () {
 
 		isRunning: function (){
 			return Engine.isRunning();
-		}
+		},
+
+        autostart: true
     }
 })();

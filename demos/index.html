@@ -32,56 +32,60 @@
             z-index: 10000000000;
             padding: 2px 3px;
         }
+        
+        b {
+            position: absolute;
+            left:0;
+            top:50%;
+            height: 20px;
+            width:20px;
+            border-radius: 50%;
+            background: red;
+
+        }
 
     </style>
 </head>
 <body>
     <span id="fps">0 fps</span>
     <time id="clock" style="letter-spacing: 2px;">..h..:..:...</time>
+    <canvas id="graph" width="1200" height="600"></canvas>
+    <b id="bulle">test</b>
     <script src="../Timer.js"></script>
+    <script src="../Timer.Transform.js"></script>
     <script src="Sugar.js"></script>
     <script>
         window["clock"] = document.querySelector("#clock");
         window["FPS"] = document.querySelector("#fps");
         function oclock(time,pc) {
             window["clock"].innerHTML = Date.create(time).format("{HH}h{mm}:{ss}:{ms}");
-            /*for (var i = 0; i < 10000; i++) {
-                window["domCache"] = document.querySelectorAll("*");
-            }*/
-
         }
 
         function color(time) {
-            var x = Math.round(Math.random() * 1000);
             window["clock"].style.color = "rgb("+Math.round(Math.random() * 255)+","+Math.round(Math.random() * 255)+","+Math.round(Math.random() * 255)+")";
-
         }
+
         var last = 0;
         function setFps (TIME){
-            window["FPS"].innerHTML = (1000/(TIME-last)).toFixed(2)+" fps";
+            window["FPS"].innerHTML = parseInt(1000/(TIME-last))+" fps";
             last = TIME;
-            }
+        }
 
         function where(time) {
-
-
             var x1 = Math.round(Math.random() * 4);
             var x2 = Math.round(Math.random() * 4);
             var pos = [0, 25, 50, 75];
-
 
             window["clock"].style.left = pos[x1] + "%";
             window["clock"].style.top = pos[x2] + "%";
         }
 
         Timer.add(oclock);
+        Timer.each(where,1000);
+        Timer.each(color,2500);
+        Timer.add(setFps);
 
 
-        Timer.each(1000, where);
-        Timer.each(2500, color);
-        AAA = Timer.add(setFps,100);
-
-        BBB = Timer.transform.start({from:0, to:100, duration:2000});
 
     </script>
 </body>

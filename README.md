@@ -1,4 +1,3 @@
-
 #Timer.js gives you the tempo, you play the music!
 
 Timer.js is a low-level solution from time-based script.  
@@ -9,7 +8,7 @@ Timer.js is made to unify all your time-based script in one and only optimize lo
 Timer.js run on the **requestAnimationFrame** method that allow smooth animation,
 by optimizing the rendering at browser level. See [http://www.html5rocks.com/en/tutorials/speed/html5/](http://www.html5rocks.com/en/tutorials/speed/html5/) and [http://paulirish.com/2011/requestanimationframe-for-smart-animating/](http://paulirish.com/2011/requestanimationframe-for-smart-animating/) for details.
 In fact, this loop is very smart cause she adapts her "framerate" depending on the rendering execution time.
-It's allways smooth.
+It's allways sync.
 
 ## Show me code!
 
